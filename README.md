@@ -5,7 +5,7 @@ Thermostat_Conference
 
 The following documents detail a 2-hour exercise, in which small teams assemble a prototype of a WiFi controllable "Smart" thermostat.  This activity was developed as a team building exercise at a corporate conference to highlight the maker movement and disruptive potential of open source hardware.  The vast majority of participants were business executives/MBAs with no technical background. The activity was successfully completed by 10 teams ranging in size from 3-10 members in 60-120 minutes, with light guidance from two facilitators.
 
-The activity was inspired by the Spark team's blog post with an "open source" Nest (http://blog.spark.io/2014/01/17/open-source-thermostat/)
+The activity was inspired by the Spark team's blog post with an "open source" Nest: http://blog.spark.io/2014/01/17/open-source-thermostat/
 
 Because the activity received very positive feedback, we'd like to release the documents for others to repeat.  The forums here at Spark have been incredibly helpful in development of this exercise - we've tried to reference back to specific posts, but likely forgot a few, so please accept our apologies (or, let us know and we will happily add a link).
 
@@ -51,9 +51,9 @@ A basic Fritzing diagram is included.  It is for visual display only, so we only
 * (1) Temp sensor: http://www.adafruit.com/products/165
 * (1) Capacitor (10000 pf): http://www.digikey.com/product-detail/en/K103K15X7RH5TL2/BC1111CT-ND/286733
 * (1) Motion sensor: http://www.parallax.com/product/28033
-* (15 cables) Jumper cables: Either one works, but the parallax ones have a slightly tighter fit around the LED jumper pins: http://www.parallax.com/product/800-00047 or (https://www.adafruit.com/products/824)
-* (2) 10k ohm resistor: Purchased as part of this kit (https://www.sparkfun.com/products/10969), but any resistor will work!
-* (1) 220 ohm resistor: Purchased as part of this kit (https://www.sparkfun.com/products/10969), but any resistor will work!
+* (15 cables) Jumper cables: Either one works, but the parallax ones have a slightly tighter fit around the LED jumper pins: http://www.parallax.com/product/800-00047 or https://www.adafruit.com/products/824
+* (2) 10k ohm resistor: Purchased as part of this kit: https://www.sparkfun.com/products/10969, but any resistor will work!
+* (1) 220 ohm resistor: Purchased as part of this kit: https://www.sparkfun.com/products/10969, but any resistor will work!
 
 ## Thermostat enclosure
 Each team was provided a 3D printed "faceplate" in which all components could be inserted.  We opted to have attendees super glue the components in place vs. "perfectly" engineer the faceplate.  For the demonstration unit, we designed a box that enclosed the entire device - great for a "wow" factor.  We used a LulzBot TAZ 4, which we would recommend, primarily due to their support team going above & beyond in helping us setup / configure the printer.
