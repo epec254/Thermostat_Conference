@@ -54,6 +54,7 @@ A basic Fritzing diagram is included.  It is for visual display only, so we only
 * (15 cables) Jumper cables: Either one works, but the parallax ones have a slightly tighter fit around the LED jumper pins: http://www.parallax.com/product/800-00047 or https://www.adafruit.com/products/824
 * (2) 10k ohm resistor: Purchased as part of this kit: https://www.sparkfun.com/products/10969, but any resistor will work!
 * (1) 220 ohm resistor: Purchased as part of this kit: https://www.sparkfun.com/products/10969, but any resistor will work!
+* (optional): USB power source, required if your participants will not have laptops to plug the Sparks into
 
 ## Thermostat enclosure
 Each team was provided a 3D printed "faceplate" in which all components could be inserted.  We opted to have attendees super glue the components in place vs. "perfectly" engineer the faceplate.  For the demonstration unit, we designed a box that enclosed the entire device - great for a "wow" factor.  We used a LulzBot TAZ 4, which we would recommend, primarily due to their support team going above & beyond in helping us setup / configure the printer.
@@ -64,5 +65,5 @@ The STL & Autodesk Inventor files are available.
 
 * *Cover_Split_Top-vPublic:* "Faceplate" provided to each attendee (note - we embossed our conference name / logo but have removed here - https://github.com/epec254/Thermostat_Conference/blob/master/07%20Thermostat%20enclosure/Cover_Split_Top-vPublic.png)
 * *Cover_Split_Bottom-vPublic:* Bottom of the "faceplate" to make it snap into the top of the box (printed separately and "acetone glued" to the top)
-* *Box_Square_Bottom v3:* Box to enclose entire device (just used for the demo unit - https://github.com/epec254/Thermostat_Conference/blob/master/07%20Thermostat%20enclosure/Box_Square_Bottom%20v3.png)
+* *Box_Square_Bottom v3:* Box to enclose entire device, note that it does not fit a power source and requires you to shorten all wires (just used for the demo unit - https://github.com/epec254/Thermostat_Conference/blob/master/07%20Thermostat%20enclosure/Box_Square_Bottom%20v3.png)
 * *Cover_Split_Bottom-Needs Support Material vPublic*: More "engineered" but completely untested bottom for the "faceplate"
