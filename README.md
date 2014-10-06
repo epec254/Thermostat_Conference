@@ -9,6 +9,8 @@ The activity was inspired by the Spark team's blog post with an "open source" Ne
 
 Because the activity received very positive feedback, we'd like to release the documents for others to repeat.  The forums here at Spark have been incredibly helpful in development of this exercise - we've tried to reference back to specific posts, but likely forgot a few, so please accept our apologies (or, let us know and we will happily add a link).
 
+![Picture of device](https://raw.githubusercontent.com/epec254/Thermostat_Conference/master/06%20Kit%20-%20BOM/Front_picture.PNG)
+
 ## Presentation
 We kicked off the activity with a ~10 minute PowerPoint presentation.  Apologies for the poor formatting, it is an artifact of removing our company's branding.  I am happy to speak privately about the talk track.
 
