@@ -1,0 +1,442 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN">
+
+<html>
+<!-- Author: Eric Peter, October 2014 -->
+<head>
+	<!-- TODO: Make this whole page work in IE -->
+	<meta http-equiv="content-type" content="text/html; charset=utf-8">
+	<!--<meta http-equiv="X-UA-Compatible" content="IE=edge">-->
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<title>Thermostat</title>
+	<!-- Bootstrap -->
+	<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet" type="text/css">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css" type="text/css">
+	<!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+	<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+	<!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+	<!-- Jquery -->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+	<script src="js/jquery.knob.min.js" type="text/javascript">
+	</script>
+
+	<style type="text/css">
+		.red {
+			color: red;
+		}
+	</style>
+</head>
+
+<body>
+	<div class="container-fluid" id="thermostat-login">
+		<div id="spark-login"></div>
+	</div>
+
+	<div class="container-fluid" style="display:none" id="thermostat-main">
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<h4 class="panel-title" id="app-heading">Control: <span id="teamname"></span></h4>
+			</div>
+
+			<div class="panel-body">
+				<div id="status_toggle" style="display:none">
+					<div class="btn-group" data-toggle="buttons" id="status-buttons">
+						<label class="btn btn-success" id="on-button-wrapper">
+							<input type="radio" name="status2" id="on-button" value="on">On</label>
+						<label class="btn btn-danger" id="off-button-wrapper">
+							<input type="radio" name="status2" id="off-button" value="off">Off</label>
+					</div>
+				</div>
+				<br>
+				<br>
+				<p><strong>Challenge status:</strong>  <span id="therm_status"></span>
+					<br>
+					<strong>Room temp:</strong>  <span id="current_temp"></span>
+					<br>
+					<strong>Motion last sensed:</strong>  <span id="motion_last" class="red"></span>
+				</p>
+			</div>
+		</div>
+	</div>
+
+	<div class="container-fluid" style="display:none" id="thermostat-tempsetting">
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<h4 class="panel-title" id="app-heading">Desired temperature</h4>
+			</div>
+
+			<div class="panel-body">
+				<input class="knob" data-min="0" data-max="40" data-rotation="clockwise" value="35" data-displayprevious="true">
+			</div>
+		</div>
+	</div>
+
+	<!--TODO: Merge these into 1 error div with a wrapper function -->
+	<div id="not-connected-error" class="alert alert-danger" role="alert" style="display:none">
+		Your Spark is not connected! Please connect &amp; try again.
+	</div>
+
+	<div id="lazy-team" class="alert alert-danger" role="alert" style="display:none">
+		Please adjust the 'core_id' and 'teamName' variables!
+	</div>
+
+	<div id="other-error" class="alert alert-danger" role="alert" style="display:none">
+		Unspecified error. Please refresh & try again!
+	</div>
+	
+	<script src="https://cdn.jsdelivr.net/sparkjs/0.2.1/spark.min.js"></script>
+	
+	</script>
+	<script type="text/javascript">
+		var core;
+		var timer;
+		var isLoggedIn = false;
+		var refreshTimerActive = false;
+		//TIME CONVERSION 
+		function timeConverter(UNIX_timestamp) {
+				var a = new Date(UNIX_timestamp * 1000);
+				var months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+				var year = a.getFullYear();
+				var month = months[a.getMonth()];
+				var date = a.getDate();
+				var hour = a.getHours();
+				var min = a.getMinutes();
+				var sec = a.getSeconds();
+				var time = month + ' ' + date + ' ' + year + ' @ ' + hour + ':' + min + ':' + sec;
+				return time;
+			} //END OF TIME CONVERSION
+
+		// callback to be executed to refresh data if core is connected
+		var refreshAllData = function(err, data) {
+			if (err) {
+				//console.log('An error occurred while getting core attrs:', err);
+				//TODO: Handle error condition appropriately
+			} else {
+				//console.log('Core attr retrieved successfully:', data.result);
+
+				//Parse data from the request
+				var parsedData = JSON.parse(data.result);
+				var contestStatus = parsedData.therm_status;
+				var showCurrentTemp = false;
+				var showMotion = false;
+				var showDesiredTemp = false;
+				var showStatusSwitch = false;
+				var validcontestStatus = false;
+				var statusString = "";
+
+				//console.log(contestStatus);
+
+				if (contestStatus == "step1") {
+					showStatusSwitch = false;
+					showCurrentTemp = false;
+					showDesiredTemp = false;
+					showMotion = false;
+					validcontestStatus = true;
+					statusString = "Step 1 (connected!)";
+				} else if (contestStatus == "step2") {
+					showStatusSwitch = false;
+					showCurrentTemp = true;
+					showDesiredTemp = false;
+					showMotion = false;
+					validcontestStatus = true;
+					statusString = "Step 2 (internet connected thermostat!)";
+				} else if (contestStatus == "step3") {
+					showStatusSwitch = false;
+					showCurrentTemp = true;
+					showDesiredTemp = false;
+					showMotion = false;
+					validcontestStatus = true;
+					statusString = "Step 3 (internet connected thermostat [with a cool display]!)";
+				} else if (contestStatus == "step4") {
+					showStatusSwitch = true;
+					showCurrentTemp = true;
+					showDesiredTemp = true;
+					showMotion = false;
+					statusString = "Step 4 (internet controllable thermostat!)";
+				} else if (contestStatus == "step5") {
+					showStatusSwitch = true;
+					showCurrentTemp = true;
+					showDesiredTemp = true;
+					showMotion = true;
+					validcontestStatus = true;
+					statusString = "Step 5: (smart thermostat complete...congrats!)";
+				}
+
+				//console.log(statusString);
+
+				if (validcontestStatus = true) {
+					document.getElementById("other-error").style.display = 'none';
+					if (parsedData.id == "1" || parsedData.team == "TeamName") {
+						//team did not update ID in our sample code, don't let them see an interface
+						document.getElementById("lazy-team").style.display = 'block';
+						document.getElementById("thermostat-login").style.display = 'block';
+					} else {
+						//team updated the ID in our sample code
+						//valid status found, we can try to load variables.
+						//Show basic building blocks, hide login
+						document.getElementById("thermostat-main").style.display = 'block';
+						document.getElementById("thermostat-login").style.display = 'none';
+						document.getElementById("lazy-team").style.display = 'none';
+						//add a margin
+						document.body.style.marginTop = "10px";
+
+						//Load the Team Name
+						document.getElementById("teamname").innerHTML = parsedData.team + " (spark" + parsedData.id + ")";
+						//Load the status
+						document.getElementById("therm_status").innerHTML = statusString;
+
+						//Should we display the status switch?
+						if (showStatusSwitch == true) {
+							document.getElementById("status_toggle").style.display = 'block';
+							//update based on current status from device
+							if (parsedData.status == "on") {
+								// console.log('on'); 
+								$("#status-buttons input[name='status']").val(0);
+								$('#off-button-wrapper').removeClass('btn-danger');
+								$('#off-button-wrapper').addClass('btn-default');
+								$('#on-button-wrapper').addClass('btn-success');
+								$('#on-button-wrapper').removeClass('btn-default');
+							} else if (parsedData.status == "off") {
+								//console.log('off');
+								$("#status-buttons input[name='status']").val(1);
+								$('#on-button-wrapper').removeClass('btn-success');
+								$('#on-button-wrapper').addClass('btn-default');
+								$('#off-button-wrapper').addClass('btn-danger');
+								$('#off-button-wrapper').removeClass('btn-default');
+
+
+							}
+						} else {
+							document.getElementById("status_toggle").style.display = 'none';
+						}
+
+						//Should we display the current temp?
+						if (showCurrentTemp == true) {
+							document.getElementById("current_temp").innerHTML = parsedData.c_tmp + "C";
+						} else {
+							document.getElementById("current_temp").innerHTML = "not yet available!";
+						}
+
+						//Should we display the desired temp?
+						if (showDesiredTemp == true) {
+							//show the thermostat setting dial
+							document.getElementById("thermostat-tempsetting").style.display = 'block';
+							var wheelColor = "#C6D5CD" // grey by default (e.g. both heat & cool are false)
+								//determine right color for the wheel
+							if (parsedData.status == "on" && parsedData.heat == "true" && parsedData.cool == "false") {
+								//heater on & thermostat on
+								wheelColor = "#DB3340" // red
+							} else if (parsedData.status == "on" && parsedData.heat == "false" && parsedData.cool == "true") {
+								//cool on & thermostat on
+								wheelColor = "#28ABE3"
+							}
+
+
+							//Update dial to show temp & correct color
+							if (parsedData.d_tmp >= 0 && parsedData.d_tmp <= 40 && refreshTimerActive == true) {
+								$('.knob')
+									.val(parsedData.d_tmp)
+									.trigger('change');
+
+								$('.knob')
+									.trigger('configure', {
+										"fgColor": wheelColor,
+										"inputColor": wheelColor
+									});
+							}
+						} else {
+							//Hide the thermostat setting dial
+							document.getElementById("thermostat-tempsetting").style.display = 'none';
+						}
+
+						//Should we display the motion?
+						if (showMotion == true) {
+							document.getElementById("motion_last").innerHTML = timeConverter(parsedData.last_motion);
+
+							//highlight in red if motion in last 5 seconds
+							if (parsedData.motion == "true") {
+								$("#motion_last").addClass("red");
+							} else {
+								$("#motion_last").removeClass("red");
+							}
+						} else {
+							document.getElementById("motion_last").innerHTML = "not yet available!";
+						}
+
+
+
+
+					}
+				} else {
+					//the spark did not send a status we currently recognize
+					document.getElementById("thermostat-main").style.display = 'none';
+					document.getElementById("thermostat-tempsetting").style.display = 'none';
+					document.getElementById("lazy-team").style.display = 'none';
+					document.getElementById("other-error").style.display = 'block';
+					document.getElementById("thermostat-login").style.display = 'block';
+
+				}
+			}
+		}; //END OF REFRESH FUNCTION
+
+		//LOGIN FUNCTION: Login to the spark using provided credentials - creates the login button & login form (provided by Spark JS library)
+		sparkLogin(function(data) {
+
+			//Hide login window
+			document.getElementById("thermostat-login").style.display = 'none';
+			//let the timing loop run
+			isLoggedIn = true;
+			//DEVICE INITIAL CONNECTION: grab list of sparks for this account 
+			var devicesPr = spark.listDevices();
+			devicesPr.then(
+				function(devices) {
+
+					//console.log('Devices: ', devices);
+
+					//Runs at load to initialize the data
+					//TODO: Allow selection of multiple devices, verify that this device actually exists (code will fail if Spark account has no devices)
+					core = devices[0];
+
+					//console.log(core.connected);
+
+					if (core.connected == true) {
+						//enable timer loop
+						refreshTimerActive = true;
+						//start processs of displaying the data
+						document.getElementById("not-connected-error").style.display = 'none';
+						//get the JSON variable from the core with all data we need
+						core.getVariable('log_data', refreshAllData);
+					} else {
+						//core not online, show error
+						document.getElementById("thermostat-main").style.display = 'none';
+						document.getElementById("thermostat-tempsetting").style.display = 'none';
+						document.getElementById("not-connected-error").style.display = 'block';
+						document.getElementById("thermostat-login").style.display = 'block';
+					}
+
+
+				},
+				function(err) {
+					//TODO: Handle error condition
+					console.log('List devices call failed: ', err);
+				}
+			); // END OF DEVICE INITIAL CONNECTION
+		}); //END OF LOGIN FUNCTION
+
+
+		//ON LOAD PAGE - kick off
+		$(document).ready(function() {
+
+			//ON / OFF BUTTON: Allow on / off buttons to be clicked
+			$("input[name='status2']").click(function() {
+				// alert('You clicked radio!');
+				var statusToggleValue = $(this).val();
+				//console.log(statusToggleValue);
+
+				if (statusToggleValue == "on") {
+					// alert($('input:radio[name=status]:checked').val());
+					//console.log(core.name);
+					core.callFunction('set_status', "on", function(err, data) {
+						if (err) {
+							//TODO: better handling of error condition
+							alert('Error changing status, try again!');
+							//console.log('on error');
+						} else {
+							//console.log('Function called succesfully:', data);
+							//console.log('set on');
+
+							//make the button appear on
+							$('#on-button-wrapper').addClass('btn-success');
+							$('#on-button-wrapper').removeClass('btn-default');
+							$('#off-button-wrapper').removeClass('btn-danger');
+							$('#off-button-wrapper').addClass('btn-default');
+
+						}
+					});
+
+				} else if (statusToggleValue == "off") {
+					//   alert($('input:radio[name=status]:checked').val());
+					//console.log(core.name);
+					core.callFunction('set_status', "off", function(err, data) {
+						if (err) {
+							//TODO: Better handling of error
+							alert('Error changing status, try again!');
+							//console.log('off error');
+						} else {
+							//console.log('Function called succesfully:', data);
+							//console.log('set off');
+							//make the button appear off
+							$('#on-button-wrapper').removeClass('btn-success');
+							$('#on-button-wrapper').addClass('btn-default');
+							$('#off-button-wrapper').addClass('btn-danger');
+							$('#off-button-wrapper').removeClass('btn-default');
+						}
+					});
+
+				}
+			}); //END OF ON / OFF BUTTON
+
+
+			//FUNCTION FOR CONTROL OF KNOB
+			$(function() {
+				$(".knob").knob({
+
+					draw: function() {
+						$(this.i).val(this.cv + 'C') //Puts a "C" after value e..g, 24C vs. 24
+					},
+					release: function(value) {
+						//Do something as you release the mouse
+						refreshTimerActive = false; //pause refresh process
+						//TODO: Better pausing of timer, make dial change color as you move it (currently, it just gets set when the refresh cycle hits)
+						//console.log(value);
+						core.callFunction('set_temp', value, function(err, data) {
+							if (err) {
+								//console.log('An error occurred:', err);
+								//TODO: better handling of error condition
+								refreshTimerActive = true; // resume refresh process
+							} else {
+								//console.log('Function called succesfully:', data);
+								refreshTimerActive = true; // resume refresh process
+							}
+						});
+					}
+
+
+				});
+			}); //END OF CONTROL FOR KNOB
+
+			//TIMER TO REFRESH PAGE
+			timer1 = setInterval(function() {
+				//TODO: check that core is still connected before refreshing
+				//core.update does not appear to work
+				//core.update();
+
+				if (refreshTimerActive == true) {
+					if (isLoggedIn == true) {
+						//TODO: Check for & handle the condition that the core becomes disconnected & show error message.
+						if (core.connected == true) {
+							//start process of displaying the data
+							document.getElementById("not-connected-error").style.display = 'none';
+							//get the JSON variable from the core & call the refresh function
+							core.getVariable('log_data', refreshAllData);
+						} else {
+							//core not online, show error
+							document.getElementById("thermostat-main").style.display = 'none';
+							document.getElementById("thermostat-tempsetting").style.display = 'none';
+							document.getElementById("not-connected-error").style.display = 'block';
+							document.getElementById("thermostat-login").style.display = 'block';
+						}
+					}
+				}
+			}, 1000); //refresh every 1 second
+
+
+		}); //END OF ON LOAD PAGE
+	</script>
+
+</body>
+
+</html>

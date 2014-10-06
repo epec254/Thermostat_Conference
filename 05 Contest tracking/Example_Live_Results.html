@@ -1,0 +1,392 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- saved from url=(0123)file:///C:/Users/Peter%20Eric/Documents/03%20Spark/04%20Post%20Conference%20Codification/03%20Log/Example_Live_Results.html -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+  <title>Thermostat</title><!-- Bootstrap -->
+ <!-- Bootstrap -->
+	<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet" type="text/css">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css" type="text/css">
+	<!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+	<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+	<!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+	<!-- Jquery -->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+	<script src="js/jquery.knob.min.js" type="text/javascript">
+	</script>
+</script>
+<style type="text/css">.modal {
+  display: none;
+  width: 400px;
+  background: #fff;
+  padding: 15px 30px;
+  -webkit-border-radius: 8px;
+  -moz-border-radius: 8px;
+  -o-border-radius: 8px;
+  -ms-border-radius: 8px;
+  border-radius: 8px;
+  -webkit-box-shadow: 0 0 10px #000;
+  -moz-box-shadow: 0 0 10px #000;
+  -o-box-shadow: 0 0 10px #000;
+  -ms-box-shadow: 0 0 10px #000;
+  box-shadow: 0 0 10px #000;
+}
+
+.modal a.close-modal {
+  position: absolute;
+  top: -12.5px;
+  right: -12.5px;
+  display: block;
+  width: 30px;
+  height: 30px;
+  text-indent: -9999px;
+}
+
+.modal-spinner {
+  display: none;
+  width: 64px;
+  height: 64px;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  margin-right: -32px;
+  margin-top: -32px;
+  -webkit-border-radius: 8px;
+  -moz-border-radius: 8px;
+  -o-border-radius: 8px;
+  -ms-border-radius: 8px;
+  border-radius: 8px;
+}
+
+.spark-login-button {
+  width: 150px;
+  border-radius: 0;
+  color: #fff;
+  font-weight: 700;
+  text-transform: uppercase;
+  padding: 12px;
+  background: #00aced;
+  border: 0;
+  font-size: 11px;
+}
+
+.spark-login-input {
+  border-radius: 0;
+  border: 1px solid #f7f7f7;
+  height: 40px;
+  width: 248px;
+  margin-bottom: 20px;
+  padding-left: 20px;
+  font-size: 16px;
+  font-weight: 300;
+  font-family: 'Gotham SSm A', 'Gotham SSm B', proxima-nova, 'Helvetica Neue', helvetica, arial, sans-serif;
+  font-size: 16px;
+  outline: none;
+}
+
+.spark-login-modal {
+  box-sizing: border-box;
+  display: block;
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-size: 14px;
+  padding-bottom: 30px;
+  padding-left: 75px;
+  padding-right: 10px;
+  padding-top: 60px;
+  width: 400px;
+  z-index: 0;
+  background: rgba(0,0,0,0.8);
+  border-radius: 0;
+  border: 0;
+}
+
+.spark-login-error {
+  background-color: #f2dede;
+  background-image: linear-gradient(to bottom, #f2dede 0, #e7c3c3 100%);
+  background-repeat: repeat-x;
+  border: 1px solid transparent;
+  border-color: #dca7a7;
+  border-radius: 4px;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.25),0 1px 2px rgba(0,0,0,0.05);
+  color: #b94a48;
+  padding: 15px;
+  margin-bottom: 20px;
+  text-shadow: 0 1px 0 rgba(255,255,255,0.2);
+  -webkit-box-shadow: inset 0 1px 0 rgba(255,255,255,0.25),0 1px 2px rgba(0,0,0,0.05);
+  width: 216px;
+  display: none;
+}
+
+#spark-login-form {
+  display: none;
+}
+
+#spark-login-form-button {
+  width: 248px;
+  margin: 20px auto;
+  background: #fad612;
+  font-size: 14px;
+}
+</style><style type="text/css">.modal {
+  display: none;
+  width: 400px;
+  background: #fff;
+  padding: 15px 30px;
+  -webkit-border-radius: 8px;
+  -moz-border-radius: 8px;
+  -o-border-radius: 8px;
+  -ms-border-radius: 8px;
+  border-radius: 8px;
+  -webkit-box-shadow: 0 0 10px #000;
+  -moz-box-shadow: 0 0 10px #000;
+  -o-box-shadow: 0 0 10px #000;
+  -ms-box-shadow: 0 0 10px #000;
+  box-shadow: 0 0 10px #000;
+}
+
+.modal a.close-modal {
+  position: absolute;
+  top: -12.5px;
+  right: -12.5px;
+  display: block;
+  width: 30px;
+  height: 30px;
+  text-indent: -9999px;
+}
+
+.modal-spinner {
+  display: none;
+  width: 64px;
+  height: 64px;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  margin-right: -32px;
+  margin-top: -32px;
+  -webkit-border-radius: 8px;
+  -moz-border-radius: 8px;
+  -o-border-radius: 8px;
+  -ms-border-radius: 8px;
+  border-radius: 8px;
+}
+
+.spark-login-button {
+  width: 150px;
+  border-radius: 0;
+  color: #fff;
+  font-weight: 700;
+  text-transform: uppercase;
+  padding: 12px;
+  background: #00aced;
+  border: 0;
+  font-size: 11px;
+}
+
+.spark-login-input {
+  border-radius: 0;
+  border: 1px solid #f7f7f7;
+  height: 40px;
+  width: 248px;
+  margin-bottom: 20px;
+  padding-left: 20px;
+  font-size: 16px;
+  font-weight: 300;
+  font-family: 'Gotham SSm A', 'Gotham SSm B', proxima-nova, 'Helvetica Neue', helvetica, arial, sans-serif;
+  font-size: 16px;
+  outline: none;
+}
+
+.spark-login-modal {
+  box-sizing: border-box;
+  display: block;
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-size: 14px;
+  padding-bottom: 30px;
+  padding-left: 75px;
+  padding-right: 10px;
+  padding-top: 60px;
+  width: 400px;
+  z-index: 0;
+  background: rgba(0,0,0,0.8);
+  border-radius: 0;
+  border: 0;
+}
+
+.spark-login-error {
+  background-color: #f2dede;
+  background-image: linear-gradient(to bottom, #f2dede 0, #e7c3c3 100%);
+  background-repeat: repeat-x;
+  border: 1px solid transparent;
+  border-color: #dca7a7;
+  border-radius: 4px;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.25),0 1px 2px rgba(0,0,0,0.05);
+  color: #b94a48;
+  padding: 15px;
+  margin-bottom: 20px;
+  text-shadow: 0 1px 0 rgba(255,255,255,0.2);
+  -webkit-box-shadow: inset 0 1px 0 rgba(255,255,255,0.25),0 1px 2px rgba(0,0,0,0.05);
+  width: 216px;
+  display: none;
+}
+
+#spark-login-form {
+  display: none;
+}
+
+#spark-login-form-button {
+  width: 248px;
+  margin: 20px auto;
+  background: #fad612;
+  font-size: 14px;
+}
+</style></head>
+
+<body class=" hasGoogleVoiceExt" style="margin-top: 10px;">
+
+<div class="container-fluid" id="thermostat-datatable">
+    <div class="panel panel-success">
+      <div class="panel-heading">
+        <h4 class="panel-title" id="app-heading">Team status<span id="teamname"></span></h4>
+      </div>
+      
+      <div class="panel-body">
+  <table id="dataTable" class="table table-striped">
+  <thead>
+    <tr>
+     <!-- <th>Core ID</th> -->
+
+      <th>Team Name</th>
+
+      <th>Team ID</th>
+
+      <th>Stage 1</th>
+
+      <th>Stage 2</th>
+
+      <th>Stage 3</th>
+
+      <th>Stage 4</th>
+
+      <th>Stage 5</th>
+    </tr>
+    <tr><td id="53ff6b066667574825262367">A perfect fit</td><td>10</td><td>2014-10-02T08:47:07.987Z</td><td>2014-10-02T08:58:47.705Z</td><td>2014-10-02T09:12:10.074Z</td><td>2014-10-02T09:30:01.328Z</td><td>2014-10-02T09:40:57.122Z</td></tr><tr><td id="53ff6b066667574835202167">Absolute Zeroes</td><td>14</td><td>2014-10-02T08:49:00.809Z</td><td>2014-10-02T08:57:44.260Z</td><td>2014-10-02T09:05:05.363Z</td><td>2014-10-02T09:07:30.058Z</td><td>2014-10-02T09:21:38.371Z</td></tr><tr><td id="53ff6b066667574818442467">BlueAngels</td><td>11</td><td>2014-10-02T08:50:24.151Z</td><td>2014-10-02T08:52:48.805Z</td><td>2014-10-02T09:01:32.420Z</td><td>2014-10-02T09:05:04.780Z</td><td>2014-10-02T09:13:53.456Z</td></tr><tr><td id="53ff71066667574841292167">Winning23</td><td>23</td><td>2014-10-02T08:50:41.940Z</td><td>2014-10-02T08:54:45.386Z</td><td>2014-10-02T09:05:01.194Z</td><td>2014-10-02T09:11:01.475Z</td><td>2014-10-02T09:15:49.706Z</td></tr><tr><td id="53ff6b066667574825361267">Thermax</td><td>22</td><td>2014-10-02T08:56:06.512Z</td><td>2014-10-02T08:59:56.194Z</td><td>2014-10-02T09:08:16.548Z</td><td>2014-10-02T09:17:43.936Z</td><td>2014-10-02T09:21:41.329Z</td></tr><tr><td id="53ff70066667574851421267">SmrtBOX</td><td>21</td><td>2014-10-02T08:57:30.716Z</td><td>2014-10-02T09:00:52.324Z</td><td>2014-10-02T09:14:02.205Z</td><td>2014-10-02T09:16:55.191Z</td><td>2014-10-02T09:23:53.116Z</td></tr><tr><td id="53ff6a066667574845572267">Nested-If</td><td>24</td><td>2014-10-02T08:58:45.391Z</td><td>2014-10-02T09:06:50.470Z</td><td>2014-10-02T09:19:46.422Z</td><td></td><td>2014-10-02T09:35:23.522Z</td></tr><tr><td id="54ff6d066667515137381367">iMeter</td><td>13</td><td></td><td>2014-10-02T09:03:34.880Z</td><td>2014-10-02T09:15:04.473Z</td><td></td><td></td></tr><tr><td id="53ff71066667574807242067">Thermonator</td><td>9</td><td>2014-10-02T09:16:35.565Z</td><td></td><td></td><td></td><td></td></tr></thead>
+  </table><br>
+  <br>
+  <script src="https://cdn.jsdelivr.net/sparkjs/0.2.1/spark.min.js"></script><script type="text/javascript">
+</script><button id="connectbutton" onclick="start()">Running</button> <script type="text/javascript">
+
+
+
+document.body.style.marginTop = "10px";
+
+$(document).ready(function(){
+	start();
+});
+    function start() {
+        document.getElementById("connectbutton").innerHTML = "Running";
+        var eventName = 'contest-status';
+        var accessToken = "<fill in access token here>";
+       var requestURL = "https://api.spark.io/v1/events/?access_token=" + accessToken;
+
+        var eventSource = new EventSource(requestURL);
+
+        eventSource.addEventListener('open', function(e) {
+            console.log("Opened!"); },false);
+
+        eventSource.addEventListener('error', function(e) {
+            console.log("Errored!"); },false);
+
+        eventSource.addEventListener(eventName, function(e) {
+            var parsedData = JSON.parse(e.data);
+            
+            
+             var innerData = JSON.parse(parsedData.data);
+   // wstream.write(parsedData.coreid + ',' + parsedData.published_at + ',' + innerData.id + "," + innerData.team + "," + innerData.contest_status + '\n');
+    
+            
+            
+           var dt = document.getElementById("dataTable");
+            var rows = dt.rows.length;
+           var foundIt = false;
+           for(var i=0;i<rows;i++) {
+             var rowN = dt.rows[i];
+             if (false==foundIt  && rowN.cells[0].id==parsedData.coreid) {
+               foundIt = true;
+               rowN.cells[0].innerHTML = innerData.team;
+               rowN.cells[1].innerHTML = innerData.id;
+               
+               if (innerData.contest_status == 'step1') {
+                       if(rowN.cells[2].innerHTML == "") {
+                               rowN.cells[2].innerHTML = parsedData.published_at; 
+                       }
+               } else if (innerData.contest_status == 'step2') {
+                       if(rowN.cells[3].innerHTML == "") {
+                               rowN.cells[3].innerHTML = parsedData.published_at; 
+                       }
+               } else if (innerData.contest_status == 'step3') {
+                       if(rowN.cells[4].innerHTML == "") {
+                               rowN.cells[4].innerHTML = parsedData.published_at; 
+                       }
+               } else if (innerData.contest_status == 'step4') {
+                       if(rowN.cells[5].innerHTML == "") {
+                               rowN.cells[5].innerHTML = parsedData.published_at; 
+                       }
+               } else if (innerData.contest_status == 'step5') {
+                       if(rowN.cells[6].innerHTML == "") {
+                               rowN.cells[6].innerHTML = parsedData.published_at; 
+                       }
+               } 
+               
+       
+             }
+           }
+           if (false == foundIt) {
+             var newRow = dt.insertRow(rows);
+             // var cell1 = newRow.insertCell(0);
+              var cell2 = newRow.insertCell(0);
+              var cell3 = newRow.insertCell(1);
+              var cell4 = newRow.insertCell(2);
+              var cell5 = newRow.insertCell(3);
+              var cell6 = newRow.insertCell(4);
+              var cell7 = newRow.insertCell(5);
+		      var cell8 = newRow.insertCell(6);
+                     
+             cell2.id = parsedData.coreid;
+             cell2.innerHTML = innerData.team;
+             cell3.innerHTML = innerData.id;
+             
+             
+             if (innerData.contest_status == 'step1') {
+                       if(cell4.innerHTML == "") {
+                               cell4.innerHTML = parsedData.published_at; 
+                       }
+               } else if (innerData.contest_status == 'step2') {
+                       if(cell5.innerHTML == "") {
+                               cell5.innerHTML = parsedData.published_at; 
+                       }
+               } else if (innerData.contest_status == 'step3') {
+                       if(cell6.innerHTML == "") {
+                               cell6.innerHTML = parsedData.published_at; 
+                       }
+               } else if (innerData.contest_status == 'step4') {
+                       if(cell7.innerHTML == "") {
+                               cell7.innerHTML = parsedData.published_at; 
+                       }
+               } else if (innerData.contest_status == 'step5') {
+                       if(cell8.innerHTML == "") {
+                               cell8.innerHTML = parsedData.published_at; 
+                       }
+               } 
+             
+             
+           }
+
+        }, false);
+    }
+  </script>
+  
+  </div></div>
+
+
+</div></body></html>
