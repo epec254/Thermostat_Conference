@@ -62,7 +62,7 @@ In case it helps someone, we included a version of the "faceplate" that has the 
 
 The STL & Autodesk Inventor files are available.
 
-* *Cover_Split_Top-vPublic:* "Faceplate" provided to each attendee (note - we embossed our conference name / logo but have removed here)
+* *Cover_Split_Top-vPublic:* "Faceplate" provided to each attendee (note - we embossed our conference name / logo but have removed here - https://github.com/epec254/Thermostat_Conference/blob/master/07%20Thermostat%20enclosure/Cover_Split_Top-vPublic.png)
 * *Cover_Split_Bottom-vPublic:* Bottom of the "faceplate" to make it snap into the top of the box (printed separately and "acetone glued" to the top)
-* *Box_Square_Bottom v3:* Box to enclose entire device (just used for the demo unit)
+* *Box_Square_Bottom v3:* Box to enclose entire device (just used for the demo unit - https://github.com/epec254/Thermostat_Conference/blob/master/07%20Thermostat%20enclosure/Box_Square_Bottom%20v3.png)
 * *Cover_Split_Bottom-Needs Support Material vPublic*: More "engineered" but completely untested bottom for the "faceplate"
